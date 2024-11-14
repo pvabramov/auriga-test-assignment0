@@ -239,6 +239,9 @@ static void print_dirs(struct fn_info_object *fn_dirs, FILE *stream) {
         fprintf(stream, "total %u\n", fn_info_object_get_blocks(&fn_files));
         fflush(stream);
 
+        // before print sort files
+        fn_info_object_sort(&fn_files);
+
         print_files(&fn_files, stream);
 
         // don't print newline for the last file

@@ -243,6 +243,25 @@ int fn_info_object_stat(struct fn_info_object *const fn_obj, const char *filenam
 }
 
 
+static int fn_info_cmp(const void *a, const void *b) {
+    const struct fn_info *fni_a = (const struct fn_info*)a;
+    const struct fn_info *fni_b = (const struct fn_info*)b;
+
+    return strcoll(fni_a->filename, fni_b->filename);
+}
+
+
+int fn_info_object_sort(struct fn_info_object *const fn_obj) {
+    if (NULL == fn_obj) {
+        return -EINVAL;
+    }
+
+    qsort(fn_obj->fni, fn_obj->n_files, sizeof(*fn_obj->fni), fn_info_cmp);
+
+    return 0;
+}
+
+
 unsigned fn_info_object_get_blocks(struct fn_info_object *const fn_obj) {
     unsigned blocks = 0;
 

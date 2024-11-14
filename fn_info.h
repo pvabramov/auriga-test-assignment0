@@ -96,6 +96,11 @@ int fn_info_object_stat(struct fn_info_object *const fn_arr, const char *filenam
  */
 unsigned fn_info_object_get_blocks(struct fn_info_object *const fn_obj);
 
+/**
+ * Sorts files by name.
+ */
+int fn_info_object_sort(struct fn_info_object *const fn_obj);
+
 #ifdef __cplusplus
 }
 #endif
