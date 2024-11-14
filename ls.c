@@ -80,14 +80,10 @@ static void show_help(const char *progname) {
 static int parse_args(int argc, char **argv) {
     const char *progname = argv[0];
 
-    /* skip progname */
-    --argc;
-    ++argv;
-
-    char **argvp = argv;
+    char **argvp = ++argv;
     int n_args = 0;
 
-    while (argc--) {
+    while (--argc) {
 
         if (strcmp(*argvp, "-h") == 0 || strcmp(*argvp, "--help") == 0) {
             show_help(progname);
@@ -261,6 +257,10 @@ int main(int argc, char **argv) {
     struct fn_info_object fn_arg_list = INITIAL_FN_INFO_OBJECT;
 
     int n_files = parse_args(argc, argv);
+
+    /* skip progname */
+    --argc;
+    ++argv;
 
     int status = fn_info_object_new(&fn_arg_list, n_files + 1);
     if (status < 0) {
