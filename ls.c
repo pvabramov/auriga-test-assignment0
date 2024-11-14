@@ -72,19 +72,25 @@ static const char* mode_string(mode_t mode, char *buf, unsigned len) {
 }
 
 
-static void show_help(void) {
-    fputs("Usage: list [-h] [FILE]...\n", stderr);
+static void show_help(const char *progname) {
+    fprintf(stderr, "Usage: %s [-h] [FILE]...\n", progname);
 }
 
 
 static int parse_args(int argc, char **argv) {
+    const char *progname = argv[0];
+
+    /* skip progname */
+    --argc;
+    ++argv;
+
     char **argvp = argv;
     int n_args = 0;
 
     while (argc--) {
 
         if (strcmp(*argvp, "-h") == 0 || strcmp(*argvp, "--help") == 0) {
-            show_help();
+            show_help(progname);
             exit(EXIT_FAILURE);
         } else {
             ++n_args;
@@ -245,6 +251,7 @@ static void print_dirs(struct fn_info_object *fn_dirs, FILE *stream) {
         }
 
         fflush(stream);
+
         fn_info_object_delete(&fn_files);
     }
 }
@@ -253,15 +260,9 @@ static void print_dirs(struct fn_info_object *fn_dirs, FILE *stream) {
 int main(int argc, char **argv) {
     struct fn_info_object fn_arg_list = INITIAL_FN_INFO_OBJECT;
 
-    int status;
-
-    /* skip program name */
-    --argc;
-    ++argv;
-
     int n_files = parse_args(argc, argv);
 
-    status = fn_info_object_new(&fn_arg_list, n_files + 1);
+    int status = fn_info_object_new(&fn_arg_list, n_files + 1);
     if (status < 0) {
         error(EXIT_FAILURE, -status, "cannot allocate files' list for arguments");
     }
