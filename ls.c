@@ -162,14 +162,18 @@ static void print_single(struct fn_info_object *fn_obj, unsigned idx, FILE *stre
 }
 
 
-static void print_files(struct fn_info_object *fn_files) {
+static void print_files(struct fn_info_object *fn_files, FILE *stream) {
     if (NULL == fn_files) {
         return;
     }
 
+    if (NULL == stream) {
+        stream = stdout;
+    }
+
     for (unsigned i = 0; i < fn_files->n_files; ++i) {
-        print_single(fn_files, i, stdout);
-        fflush(stdout);
+        print_single(fn_files, i, stream);
+        fflush(stream);
     }
 }
 
@@ -202,9 +206,13 @@ static void scan_dir(const char *path, struct fn_info_object *fn_files) {
 }
 
 
-static void print_dirs(struct fn_info_object *fn_dirs) {
+static void print_dirs(struct fn_info_object *fn_dirs, FILE *stream) {
     if (NULL == fn_dirs) {
         return;
+    }
+
+    if (NULL == stream) {
+        stream = stdout;
     }
 
     struct fn_info_object fn_files = INITIAL_FN_INFO_OBJECT;
@@ -223,7 +231,7 @@ static void print_dirs(struct fn_info_object *fn_dirs) {
         fprintf(stream, "total %u\n", fn_info_object_get_blocks(&fn_files));
         fflush(stream);
 
-        print_files(&fn_files);
+        print_files(&fn_files, stream);
 
         fn_info_object_delete(&fn_files);
     }
@@ -279,8 +287,8 @@ int main(int argc, char **argv) {
     fn_info_object_copy_special(&fn_files_list, &fn_arg_list, FT_DIRECTORY, 1);
     fn_info_object_copy_special(&fn_dirs_list, &fn_arg_list, FT_DIRECTORY, 0);
 
-    print_files(&fn_files_list);
-    print_dirs(&fn_dirs_list);
+    print_files(&fn_files_list, stdout);
+    print_dirs(&fn_dirs_list, stdout);
 
     fn_info_object_delete(&fn_dirs_list);
     fn_info_object_delete(&fn_files_list);
