@@ -91,6 +91,11 @@ int fn_info_object_copy_special(struct fn_info_object *const fn_dst, struct fn_i
  */
 int fn_info_object_stat(struct fn_info_object *const fn_arr, const char *filename, const char *fullname);
 
+/**
+ * Calculates the number of file system blocks.
+ */
+unsigned fn_info_object_get_blocks(struct fn_info_object *const fn_obj);
+
 #ifdef __cplusplus
 }
 #endif

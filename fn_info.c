@@ -241,3 +241,18 @@ int fn_info_object_stat(struct fn_info_object *const fn_obj, const char *filenam
     
     return 0;
 }
+
+
+unsigned fn_info_object_get_blocks(struct fn_info_object *const fn_obj) {
+    unsigned blocks = 0;
+
+    if (fn_obj) {
+        for (unsigned i = 0; i < fn_obj->n_files; ++i) {
+            struct fn_info *fni = &fn_obj->fni[i];
+            blocks += fni->fblocks;
+        }
+    }
+
+    // coreutils `ls' uses 1k blocks
+    return (blocks + 1U) >> 1;
+}

@@ -219,6 +219,10 @@ static void print_dirs(struct fn_info_object *fn_dirs) {
         }
 
         scan_dir(path, &fn_files);
+
+        fprintf(stream, "total %u\n", fn_info_object_get_blocks(&fn_files));
+        fflush(stream);
+
         print_files(&fn_files);
 
         fn_info_object_delete(&fn_files);
