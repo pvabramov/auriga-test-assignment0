@@ -173,6 +173,9 @@ static void print_files(struct fn_info_object *fn_files, FILE *stream) {
         stream = stdout;
     }
 
+    // for input files do the sort too
+    fn_info_object_sort(fn_files);
+
     for (unsigned i = 0; i < fn_files->n_files; ++i) {
         print_single(fn_files, i, stream);
         fflush(stream);
@@ -216,6 +219,9 @@ static void print_dirs(struct fn_info_object *fn_dirs, FILE *stream) {
     if (NULL == stream) {
         stream = stdout;
     }
+
+    // for input directories do the sort too
+    fn_info_object_sort(fn_dirs);
 
     struct fn_info_object fn_files = INITIAL_FN_INFO_OBJECT;
     int show_dir_names = fn_dirs->n_files > 1;
