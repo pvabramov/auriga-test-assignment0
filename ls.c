@@ -216,6 +216,8 @@ static void print_dirs(struct fn_info_object *fn_dirs, FILE *stream) {
     }
 
     struct fn_info_object fn_files = INITIAL_FN_INFO_OBJECT;
+    int show_dir_names = fn_dirs->n_files > 1;
+    unsigned last_file_idx = fn_dirs->n_files - 1U;
 
     for (unsigned i = 0; i < fn_dirs->n_files; ++i) {
         const char *path = fn_dirs->fni[i].fullname;
@@ -228,11 +230,21 @@ static void print_dirs(struct fn_info_object *fn_dirs, FILE *stream) {
 
         scan_dir(path, &fn_files);
 
+        if (show_dir_names) {
+            fprintf(stream, "%s:\n", path);
+        }
+
         fprintf(stream, "total %u\n", fn_info_object_get_blocks(&fn_files));
         fflush(stream);
 
         print_files(&fn_files, stream);
 
+        // don't print newline for the last file
+        if (show_dir_names && i != last_file_idx) {
+            fputc('\n', stream);
+        }
+
+        fflush(stream);
         fn_info_object_delete(&fn_files);
     }
 }
